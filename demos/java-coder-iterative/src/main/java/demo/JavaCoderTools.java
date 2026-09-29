@@ -15,7 +15,7 @@ public class JavaCoderTools {
 
     private static final Logger LOG = Logger.getLogger(JavaCoderTools.class);
 
-    static final Path WORKSPACE = Path.of(System.getProperty("java.io.tmpdir"), "gpu-llama3-java-coder-iterative");
+    static final Path WORKSPACE = Path.of(System.getProperty("java.io.tmpdir"), "jitllm-java-coder-iterative");
     private static final Path JAVA_BIN = Path.of(System.getProperty("java.home"), "bin");
 
     // Stores the raw result of the last buildAndRun call so the host can

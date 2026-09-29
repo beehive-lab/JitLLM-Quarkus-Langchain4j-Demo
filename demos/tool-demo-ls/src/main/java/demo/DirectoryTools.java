@@ -13,6 +13,12 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class DirectoryTools {
 
+    /**
+     * The listing is fed back to the model and echoed in its answer, so both have to fit in the
+     * context (max-tokens). A busy directory such as /tmp can hold hundreds of entries.
+     */
+    static final int MAX_ENTRIES = 100;
+
     @Tool("List the contents of an absolute directory path. Use this whenever the user asks what is inside a directory.")
     public String listDirectory(
             @P("Absolute directory path, for example /tmp or /home/orion/Desktop")
@@ -47,7 +53,7 @@ public class DirectoryTools {
             }
 
             StringBuilder sb = new StringBuilder("Contents of ").append(dir).append(":\n");
-            for (Path p : entries) {
+            for (Path p : entries.subList(0, Math.min(entries.size(), MAX_ENTRIES))) {
                 if (Files.isDirectory(p)) {
                     sb.append("dir:  ").append(p.getFileName()).append("\n");
                 } else {
@@ -58,6 +64,9 @@ public class DirectoryTools {
                         sb.append("file: ").append(p.getFileName()).append("\n");
                     }
                 }
+            }
+            if (entries.size() > MAX_ENTRIES) {
+                sb.append("... and ").append(entries.size() - MAX_ENTRIES).append(" more entries\n");
             }
             return sb.toString();
         } catch (IOException e) {
