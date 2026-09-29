@@ -1,7 +1,7 @@
-# Quarkus + LangChain4j + GPULlama3 Demos
+# Quarkus + LangChain4j + JitLLM Demos
 
-A collection of Quarkus applications that drive [GPULlama3.java](https://github.com/beehive-lab/GPULlama3.java) via the
-[quarkus-langchain4j](https://github.com/quarkiverse/quarkus-langchain4j) `gpu-llama3` provider. Each demo lives under
+A collection of Quarkus applications that drive [JitLLM](https://github.com/beehive-lab/jitllm) via the
+[quarkus-langchain4j](https://github.com/quarkiverse/quarkus-langchain4j) `jitllm` provider. Each demo lives under
 `demos/` as its own Maven module and can be built once at the repo root and run independently.
 
 Inspired by: <https://docs.quarkiverse.io/quarkus-langchain4j/dev/quickstart-summarization.html>
@@ -53,13 +53,13 @@ Everything else comes from Maven Central — no local builds needed:
 | Component | Version |
 |---|---|
 | Quarkus | 3.33.3.1 |
-| quarkus-langchain4j (`gpu-llama3` provider) | 1.14.0.CR3 |
-| `io.github.beehive-lab:gpu-llama3` | 1.0.0-jdk25 |
+| quarkus-langchain4j (`jitllm` provider) | 1.14.0.CR3 |
+| `io.github.beehive-lab:jitllm` | 1.0.0-jdk25 |
 | TornadoVM | 5.2.0-jdk25 |
 
 All four are pinned in the root [`pom.xml`](pom.xml). They are interdependent: a locally installed
 jar that reuses one of these coordinates (e.g. a `999-SNAPSHOT` quarkus-langchain4j, or a
-`gpu-llama3` built from GPULlama3 `main`) shadows the published one and surfaces as a runtime
+`jitllm` built from JitLLM `main`) shadows the published one and surfaces as a runtime
 `NoSuchMethodError` / `ClassNotFoundException`, not a build failure.
 
 ## 2. Build all demos
@@ -139,10 +139,10 @@ See [`devoxx-athens-demo.md`](devoxx-athens-demo.md) for a worked sequence of de
 
 Each demo has its own `src/main/resources/application.properties`. Common knobs:
 
-- `quarkus.langchain4j.gpu-llama3.chat-model.model-name` — Hugging Face GGUF repo (e.g. `unsloth/Llama-3.2-1B-Instruct-GGUF`)
-- `quarkus.langchain4j.gpu-llama3.chat-model.quantization` — `Q8_0`, `F16`, ...
-- `quarkus.langchain4j.gpu-llama3.chat-model.temperature`, `.top-p`, `.max-tokens`
-- `quarkus.langchain4j.gpu-llama3.chat-model.device-memory` — TornadoVM heap, tune to your GPU.
+- `quarkus.langchain4j.jitllm.chat-model.model-name` — Hugging Face GGUF repo (e.g. `unsloth/Llama-3.2-1B-Instruct-GGUF`)
+- `quarkus.langchain4j.jitllm.chat-model.quantization` — `Q8_0`, `F16`, ...
+- `quarkus.langchain4j.jitllm.chat-model.temperature`, `.top-p`, `.max-tokens`
+- `quarkus.langchain4j.jitllm.chat-model.device-memory` — TornadoVM heap, tune to your GPU.
   Since quarkus-langchain4j 1.14 the extension sets this itself, so the old `-Dtornado.device.memory`
   JVM flag is ignored (its 4GB default OOMs on F16 models).
 - `-Dllama.batchedPrefill=true -Dllama.prefillBatchSize=<N>` — enable batched prefill-decode
