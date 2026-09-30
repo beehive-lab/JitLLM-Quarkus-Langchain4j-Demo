@@ -15,6 +15,10 @@ Inspired by: <https://docs.quarkiverse.io/quarkus-langchain4j/dev/quickstart-sum
 | [`demos/tool-demo-ls`](demos/tool-demo-ls) | Tool calling — LLM invokes a `listDirectory` tool | Qwen3 4B Q8_0 | `Show me what is inside /tmp` |
 | [`demos/java-coder-demo`](demos/java-coder-demo) | Code generation, then `writeFile` / `buildAndRun` tool calls | Qwen3 4B Q8_0 | `Write a Java class to print HelloWorld` |
 | [`demos/java-coder-iterative`](demos/java-coder-iterative) | Generate → compile → ask LLM to fix on error (up to 3 attempts) | Qwen3 4B Q8_0 | `Write a matrix multiplication Java program` |
+| [`demos/gh-pr-code-reviewer`](demos/gh-pr-code-reviewer) | Code review of a real GitHub pull request, with streamed reasoning | Qwen3.8 27B Q4_0 | a pull request link (required) |
+
+The other demos reserve 8 GB of device memory (`device-memory`); `gh-pr-code-reviewer` reserves 22 GB and needs a
+24 GB GPU: its model file alone is 16 GB.
 
 ## 1. Prerequisites
 
@@ -141,6 +145,18 @@ scripts/run-java-coder-iterative.sh                  # default: matrix multiplic
 scripts/run-java-coder-iterative.sh "Write a quicksort in Java"
 ```
 
+### gh-pr-code-reviewer (review a GitHub pull request)
+
+```bash
+scripts/run-gh-pr-code-reviewer.sh https://github.com/beehive-lab/TornadoVM/pull/1132
+scripts/run-gh-pr-code-reviewer.sh https://github.com/owner/repo/pull/123 --max-diff-chars 30000
+```
+
+Fetches the pull request and its diff from the GitHub REST API, then streams the model's reasoning
+(dimmed) and a Markdown review: summary, findings with severity and `path:line`, verdict. Set
+`GITHUB_TOKEN` for private repositories or to lift GitHub's unauthenticated rate limit. Expect minutes,
+not seconds, per review; see [its README](demos/gh-pr-code-reviewer/README.md).
+
 ## 4. Dev mode (no need to repackage)
 
 Each module can also be run via `quarkus:dev`, which is handy when iterating on a single demo:
@@ -184,5 +200,6 @@ The two summarization demos use no tools and run well on Llama 3.2 1B F16.
 ## 6. Tested with
 
 CUDA backend, RTX 5090 Laptop GPU (24 GB): JDK 25.0.2, TornadoVM 7.0.1-jdk22plus-cuda, JitLLM
-1.0.2-jdk22plus, quarkus-langchain4j PR #2888 (`595955d02`), Quarkus 3.33.3.1. All five demos with the
-committed configuration, plus chat-summarization with batched prefill-decode (batch 32).
+1.0.2-jdk22plus, quarkus-langchain4j PR #2888 (`595955d02`), Quarkus 3.33.3.1. All demos with the
+committed configuration, plus chat-summarization with batched prefill-decode (batch 32). `gh-pr-code-reviewer`
+on pull requests from 2 to 46 changed files.
