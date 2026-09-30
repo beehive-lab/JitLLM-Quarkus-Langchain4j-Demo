@@ -15,7 +15,7 @@ public class JavaCoderTools {
 
     private static final Logger LOG = Logger.getLogger(JavaCoderTools.class);
 
-    static final Path WORKSPACE = Path.of(System.getProperty("java.io.tmpdir"), "gpu-llama3-java-coder");
+    static final Path WORKSPACE = Path.of(System.getProperty("java.io.tmpdir"), "jitllm-java-coder");
     private static final Path JAVA_BIN = Path.of(System.getProperty("java.home"), "bin");
 
     @Tool("Writes a Java program in a file")

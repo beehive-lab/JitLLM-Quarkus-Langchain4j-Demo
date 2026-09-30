@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>Quarkus-Langchain4j-GPULlama3-Demos</artifactId>
+    <artifactId>JitLLM-Quarkus-Langchain4j-Demo</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -14,14 +14,14 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <quarkus.version>3.33.3.1</quarkus.version>
-        <quarkus-langchain4j.version>1.14.0.CR3</quarkus-langchain4j.version>
-        <!-- GPULlama3 core. Pinned explicitly: the extension picks it via a JDK profile in its
-             own parent, which is not reliable to inherit here. 1.0.0-jdk25 is compiled against
-             tornado-api 5.0.0, so it needs TornadoVM 5.x (5.2.0-jdk25 verified) - on TornadoVM 6.x
-             it fails with "Kernel entry ... has no writeReplace()". For TornadoVM 6.0.0, build the
-             GPULlama3.java v1.0.0 tag against it and pin that build instead:
-               mvn install -DskipTests -Dtornadovm.version=6.0.0-jdk22plus -Djdk.version.suffix=-jdk25-tvm6 -->
-        <gpu-llama3.version>1.0.0-jdk25</gpu-llama3.version>
+        <!-- The jitllm provider (quarkiverse/quarkus-langchain4j#2888) is not released yet: build
+             that PR's branch and install it as 999-SNAPSHOT (see README). Switch to the first
+             quarkus-langchain4j release that contains it once published. -->
+        <quarkus-langchain4j.version>999-SNAPSHOT</quarkus-langchain4j.version>
+        <!-- JitLLM engine. Pinned explicitly to the JDK 22+ line (these demos build on JDK 25): the
+             extension selects its JitLLM line through a JDK profile in its own parent, which is
+             not reliable to inherit here. Needs a TornadoVM 7.0.1-jdk22plus-<backend> SDK. -->
+        <jitllm.version>1.0.2-jdk22plus</jitllm.version>
         <tornado.argfile>${env.TORNADOVM_HOME}/tornado-argfile</tornado.argfile>
     </properties>
 
@@ -31,6 +31,7 @@
         <module>demos/tool-demo-ls</module>
         <module>demos/java-coder-demo</module>
         <module>demos/java-coder-iterative</module>
+        <module>demos/gh-pr-code-reviewer</module>
     </modules>
 
     <dependencyManagement>
@@ -44,8 +45,8 @@
             </dependency>
             <dependency>
                 <groupId>io.github.beehive-lab</groupId>
-                <artifactId>gpu-llama3</artifactId>
-                <version>${gpu-llama3.version}</version>
+                <artifactId>jitllm</artifactId>
+                <version>${jitllm.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

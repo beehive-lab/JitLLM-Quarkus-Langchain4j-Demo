@@ -6,7 +6,6 @@ ARGFILE="$("$(dirname "$0")/tornado-args.sh")"
 CMD=(java
     "@$ARGFILE"
     --add-modules jdk.incubator.vector
-    --enable-preview
     -jar demos/tool-demo-ls/target/quarkus-app/quarkus-run.jar
     "$PROMPT")
 echo "${CMD[*]}"
