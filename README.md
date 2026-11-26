@@ -30,11 +30,11 @@ sdk use     java 25.0.2-open
 java -version   # openjdk 25 ...
 ```
 
-### TornadoVM 7.0.1
+### TornadoVM 8.2.0
 
 ```bash
-sdk install tornadovm 7.0.1-jdk22plus-cuda   # or 7.0.1-jdk22plus-opencl
-sdk use     tornadovm 7.0.1-jdk22plus-cuda
+sdk install tornadovm 8.2.0-jdk22plus-cuda   # or 8.2.0-jdk22plus-opencl
+sdk use     tornadovm 8.2.0-jdk22plus-cuda
 echo "$TORNADOVM_HOME"   # must be set; SDKMAN sets it automatically
 tornado --devices
 ```
@@ -50,29 +50,26 @@ build on JDK 25, so they use the `jdk22plus` line of both.
 
 ### quarkus-langchain4j with the `jitllm` provider (local build)
 
-The `jitllm` provider — the JitLLM 1.0.2 port and the rename of the former `gpu-llama3` extension — is in
-review upstream as [quarkiverse/quarkus-langchain4j#2888](https://github.com/quarkiverse/quarkus-langchain4j/pull/2888)
-and not released yet. Until it is, build that PR's branch and install it as `999-SNAPSHOT`:
+The demos build against quarkus-langchain4j `main`, which is on the same Quarkus version as these demos.
+Build it and install it as `999-SNAPSHOT`:
 
 ```bash
 git clone https://github.com/quarkiverse/quarkus-langchain4j.git
 cd quarkus-langchain4j
-git fetch origin pull/2888/head:jitllm-provider
-git checkout jitllm-provider
 mvn install -DskipTests -pl model-providers/jitllm/deployment -am
 ```
 
-Once a quarkus-langchain4j release contains the provider, set `<quarkus-langchain4j.version>` in the root
-[`pom.xml`](pom.xml) to it and skip this step.
+Once a quarkus-langchain4j release on the same Quarkus version is published, set
+`<quarkus-langchain4j.version>` in the root [`pom.xml`](pom.xml) to it and skip this step.
 
 ### Versions
 
 | Component | Version | Source |
 |---|---|---|
-| Quarkus | 3.33.3.1 | Maven Central |
-| quarkus-langchain4j (`jitllm` provider) | 999-SNAPSHOT | local build of PR #2888 |
-| `io.github.beehive-lab:jitllm` | 1.0.2-jdk22plus | Maven Central |
-| TornadoVM | 7.0.1-jdk22plus (CUDA or OpenCL) | SDKMAN |
+| Quarkus | 4.0.0 | Maven Central |
+| quarkus-langchain4j (`jitllm` provider) | 999-SNAPSHOT | local build of `main` |
+| `io.github.beehive-lab:jitllm` | 3.1.0-jdk22plus | Maven Central |
+| TornadoVM | 8.2.0-jdk22plus (CUDA or OpenCL) | SDKMAN |
 
 All are pinned in the root [`pom.xml`](pom.xml). `jitllm` is pinned there explicitly: the extension picks
 its JitLLM line through a JDK profile in its own parent, which is not reliable to inherit. A locally installed
@@ -199,7 +196,9 @@ The two summarization demos use no tools and run well on Llama 3.2 1B F16.
 
 ## 6. Tested with
 
-CUDA backend, RTX 5090 Laptop GPU (24 GB): JDK 25.0.2, TornadoVM 7.0.1-jdk22plus-cuda, JitLLM
-1.0.2-jdk22plus, quarkus-langchain4j PR #2888 (`595955d02`), Quarkus 3.33.3.1. All demos with the
-committed configuration, plus chat-summarization with batched prefill-decode (batch 32). `gh-pr-code-reviewer`
-on pull requests from 2 to 46 changed files.
+CUDA backend, RTX 5090 Laptop GPU (24 GB): JDK 25.0.2, TornadoVM 8.2.0-jdk22plus-cuda, JitLLM
+3.1.0-jdk22plus, quarkus-langchain4j `main` with the JitLLM 3.1.0 bump
+([quarkiverse/quarkus-langchain4j#3296](https://github.com/quarkiverse/quarkus-langchain4j/pull/3296)),
+Quarkus 4.0.0. `chat-summarization`, `streaming-summarization`, `tool-demo-ls`, `java-coder-demo` and
+`java-coder-iterative` with the committed configuration; `gh-pr-code-reviewer` with
+`-Dquarkus.langchain4j.jitllm.chat-model.reasoning-effort=low`, on a 2-file pull request.

@@ -31,7 +31,7 @@ sample.
 
 ## Prerequisites
 
-- The setup in the [root README](../../README.md): JDK 25, TornadoVM 7.0.1-jdk22plus, the local build of
+- The setup in the [root README](../../README.md): JDK 25, TornadoVM 8.2.0-jdk22plus, the local build of
   the quarkus-langchain4j `jitllm` provider.
 - A GPU with 24 GB. The model file is 16 GB; the demo reserves 22 GB of device memory
   (`device-memory`). A review of a 46-file pull request peaked at 19.9 GB.

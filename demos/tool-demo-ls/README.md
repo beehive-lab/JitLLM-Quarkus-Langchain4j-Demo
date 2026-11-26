@@ -13,7 +13,7 @@ The AI service is given a `listDirectory` tool and must call it to answer questi
 
 ## Prerequisites and build
 
-See the [root README](../../README.md): JDK 25, TornadoVM 7.0.1-jdk22plus, the local build of the
+See the [root README](../../README.md): JDK 25, TornadoVM 8.2.0-jdk22plus, the local build of the
 quarkus-langchain4j `jitllm` provider, then build all demos from the repo root.
 
 ## Configuration

@@ -13,15 +13,15 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <quarkus.version>3.33.3.1</quarkus.version>
-        <!-- The jitllm provider (quarkiverse/quarkus-langchain4j#2888) is not released yet: build
-             that PR's branch and install it as 999-SNAPSHOT (see README). Switch to the first
-             quarkus-langchain4j release that contains it once published. -->
+        <quarkus.version>4.0.0</quarkus.version>
+        <!-- The jitllm provider is built from quarkus-langchain4j main and installed as
+             999-SNAPSHOT (see README). Switch to a quarkus-langchain4j release on the same Quarkus
+             version once one is published. -->
         <quarkus-langchain4j.version>999-SNAPSHOT</quarkus-langchain4j.version>
         <!-- JitLLM engine. Pinned explicitly to the JDK 22+ line (these demos build on JDK 25): the
              extension selects its JitLLM line through a JDK profile in its own parent, which is
-             not reliable to inherit here. Needs a TornadoVM 7.0.1-jdk22plus-<backend> SDK. -->
-        <jitllm.version>1.0.2-jdk22plus</jitllm.version>
+             not reliable to inherit here. Needs a TornadoVM 8.2.0-jdk22plus-<backend> SDK. -->
+        <jitllm.version>3.1.0-jdk22plus</jitllm.version>
         <tornado.argfile>${env.TORNADOVM_HOME}/tornado-argfile</tornado.argfile>
     </properties>
 
